@@ -28,7 +28,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // an sqlite query and we are
         // setting our column names
         // along with their data types.
-        String query = "CREATE TABLE `Profile` (`name` VARCHAR,`firstname` VARCHAR,`hour` DATE,`message` TEXT);";
+        String query = "CREATE TABLE `Profile` (`name` VARCHAR,`firstname` VARCHAR,`number` VARCHAR,`hour` DATE,`message` TEXT);";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -36,7 +36,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addProfile(String name, String firstname, String date, String message,String hour) {
+    public void addProfile(String name, String firstname, String date, String message,String hour,String number) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -51,6 +51,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // along with its key and value pair.
         values.put(name, name);
         values.put(firstname, firstname);
+        values.put(number, number);
         values.put(date, date);
         values.put(message, message);
         values.put(hour, hour);
@@ -67,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
-        db.execSQL("DROP TABLE IF EXISTS " + "profile");
+        db.execSQL("DROP TABLE IF EXISTS profile");
         onCreate(db);
     }
 }
