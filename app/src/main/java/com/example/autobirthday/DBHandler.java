@@ -4,8 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -24,50 +28,55 @@ public class DBHandler extends SQLiteOpenHelper {
     // below method is for creating a database by running a sqlite query
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // on below line we are creating
-        // an sqlite query and we are
-        // setting our column names
-        // along with their data types.
-        String query = "CREATE TABLE `Profile` (`name` VARCHAR,`firstname` VARCHAR,`hour` DATE,`message` TEXT);";
 
-        // at last we are calling a exec sql
-        // method to execute above sql query
-        db.execSQL(query);
+
+
+        db.execSQL("CREATE TABLE Message(\n" +
+                "\tnum        INTEGER PRIMARY KEY AUTOINCREMENT ,\n" +
+                "\tmessage    TEXT NOT NULL,\n" +
+                "\tname    TEXT NOT NULL\n "+
+                ");");
+
+        db.execSQL("CREATE TABLE Profile(\n" +
+                "\tid             INTEGER PRIMARY KEY AUTOINCREMENT ,\n" +
+                "\tname           TEXT NOT NULL ,\n" +
+                "\tphoneNumber    TEXT NOT NULL ,\n" +
+                "\tdate           DATE NOT NULL \n" +
+
+                ");");
+
+        db.execSQL("CREATE TABLE Messages(\n" +
+                "\tnum    INTEGER NOT NULL ,\n" +
+                "\tid     INTEGER NOT NULL,\n" +
+                "\tCONSTRAINT Messages_PK PRIMARY KEY (num,id)\n" +
+                "\n" +
+                "\t,CONSTRAINT Messages_Message_FK FOREIGN KEY (num) REFERENCES Message(num)\n" +
+                "\t,CONSTRAINT Messages_Profile0_FK FOREIGN KEY (id) REFERENCES Profile(id)\n" +
+                ");");
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addProfile(String name, String firstname, String date, String message,String hour) {
+    public void addProfile(String profileName, String phoneNumber, LocalDateTime date) {
 
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // on below line we are creating a
-        // variable for content values.
         ContentValues values = new ContentValues();
 
-        // on below line we are passing all values
-        // along with its key and value pair.
-        values.put(name, name);
-        values.put(firstname, firstname);
-        values.put(date, date);
-        values.put(message, message);
-        values.put(hour, hour);
+        values.put("name", profileName);
+        values.put("phoneNumber", phoneNumber);
+        values.put("date", String.valueOf(date));
 
-        // after adding all values we are passing
-        // content values to our table.
+
         db.insert("Profile", null, values);
 
-        // at last we are closing our
-        // database after adding database.
         db.close();
+        Log.d("Test", "addProfile: ");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
-        db.execSQL("DROP TABLE IF EXISTS " + "profile");
+        db.execSQL("DROP TABLE IF EXISTS " + "Profile"+"Message"+"Messages");
         onCreate(db);
     }
 }

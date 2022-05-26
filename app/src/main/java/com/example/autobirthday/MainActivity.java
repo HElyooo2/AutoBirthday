@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddProfileActivity.class);
                 startActivity(intent);
-                Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
+
             }
         });
 
