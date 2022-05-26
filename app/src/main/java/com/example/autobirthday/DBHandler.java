@@ -28,6 +28,7 @@ public class DBHandler extends SQLiteOpenHelper {
     // below method is for creating a database by running a sqlite query
     @Override
     public void onCreate(SQLiteDatabase db) {
+        add_profile_button
 
 
 
@@ -58,13 +59,16 @@ public class DBHandler extends SQLiteOpenHelper {
     // this method is use to add new course to our sqlite database.
     public void addProfile(String profileName, String phoneNumber, LocalDateTime date) {
 
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
+        add_profile_button
         values.put("name", profileName);
         values.put("phoneNumber", phoneNumber);
         values.put("date", String.valueOf(date));
+
 
 
         db.insert("Profile", null, values);
@@ -76,7 +80,10 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
+        add_profile_button
         db.execSQL("DROP TABLE IF EXISTS " + "Profile"+"Message"+"Messages");
+
+
         onCreate(db);
     }
 }
